@@ -21,8 +21,11 @@ sessionListener = function() {
   console.log("Session listener");
 }
 
-receiverListener = function() {
+receiverListener = function(e) {
   console.log("Receiver listener");
+  if (e === chrome.cast.ReceiverAvailability.AVAILABLE) {
+    console.log("Receiver is available");
+  }
 }
 
 onInitSuccess = function() {
@@ -31,4 +34,32 @@ onInitSuccess = function() {
 
 onError = function() {
   console.log("Cast API int error.");
+}
+
+startAppSession = function() {
+  console.log("Request app session")
+  chrome.cast.requestSession(onRequestSessionSuccess, onLaunchError);
+}
+
+onRequestSessionSuccess = function(e) {
+  console.log("App session request success");
+  console.log(e);
+  appSession = e;
+
+  appSession.addUpdateListener(sessionUpdated);
+}
+
+onLaunchError = function(e) {
+  console.log("App session request error: ");
+  console.log(e);
+}
+
+stopApp = function() {
+  console.log("Stop app session.")
+  session.stop(onSuccess, onError);
+}
+
+sessionUpdated = function(e) {
+  console.log("Session update received");
+  console.log(e);
 }
