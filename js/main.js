@@ -1,4 +1,6 @@
 var applicationID = "6F1E40A5";
+var appSession = null;
+// TOO
 
 window['__onGCastApiAvailable'] = function(loaded, errorInfo) {
   if (loaded) {
@@ -17,8 +19,9 @@ initializeCastApi = function() {
   chrome.cast.initialize(apiConfig, onInitSuccess, onError);
 };
 
-sessionListener = function() {
+sessionListener = function(e) {
   console.log("Session listener");
+  console.log(e);
 }
 
 receiverListener = function(e) {
@@ -33,7 +36,7 @@ onInitSuccess = function() {
 }
 
 onError = function() {
-  console.log("Cast API int error.");
+  console.log("Cast API init error.");
 }
 
 startAppSession = function() {
@@ -54,12 +57,21 @@ onLaunchError = function(e) {
   console.log(e);
 }
 
-stopApp = function() {
-  console.log("Stop app session.")
-  session.stop(onSuccess, onError);
-}
-
 sessionUpdated = function(e) {
   console.log("Session update received");
   console.log(e);
+}
+
+stopApp = function() {
+  console.log("Stop app session.")
+  appSession.stop(onStopSuccess, onStopError);
+}
+
+onStopError = function(e) {
+  console.log("App stop error");
+  console.log(e);
+}
+
+onStopSuccess = function(e) {
+  console.log("App stopped.");
 }
