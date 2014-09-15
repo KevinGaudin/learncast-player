@@ -1,14 +1,15 @@
 <!DOCTYPE html>
-<html>
+<html ng-app="LearnPlayerApp">
 <head>
 	<title>Learn sender</title>
-
+	<script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/angularjs/1.3.0-rc.0/angular.min.js"></script>
 	<script type="text/javascript" src="https://www.gstatic.com/cv/js/sender/v1/cast_sender.js"></script>
 	<script type="text/javascript" src="js/main.js"></script>
 </head>
-<body>
+<body ng-controller="LearnPlayerController">
 <h1>Sender</h1>
 <div onclick="startAppSession()">Request session</div>
 <div onclick="stopApp()">Stop application</div>
+<input type="text" ng-model="name" />
 </body>
 </html>
