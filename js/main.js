@@ -1,5 +1,4 @@
 var applicationID = "6F1E40A5";
-var appSession = null;
 
 console.log("Create app module");
 var learnPlayerApp = angular.module('LearnPlayerApp', []);
@@ -16,8 +15,8 @@ var LearnPlayerController = function($scope) {
     }
   }
 
-  $scope.startAppSession = this.startAppSession;
-  $scope.stopApp = this.stopApp;
+  $scope.startAppSession = this.startAppSession.bind(this);
+  $scope.stopApp = this.stopApp.bind(this);
   $scope.name = "Player" + Math.floor((Math.random() * 10) + 1);
 }
 
@@ -27,9 +26,9 @@ var LearnPlayerController = function($scope) {
  */
 LearnPlayerController.prototype.initializeCastApi = function() {
   this.sessionRequest = new chrome.cast.SessionRequest(applicationID);
-  this.apiConfig = new chrome.cast.ApiConfig(this.sessionRequest, this.sessionListener,
-    this.receiverListener);
-  chrome.cast.initialize(this.apiConfig, this.onInitSuccess, this.onInitError);
+  this.apiConfig = new chrome.cast.ApiConfig(this.sessionRequest, this.sessionListener.bind(this),
+    this.receiverListener.bind(this));
+  chrome.cast.initialize(this.apiConfig, this.onInitSuccess.bind(this), this.onInitError.bind(this));
 };
 
 /* API Init OK */
@@ -53,12 +52,13 @@ LearnPlayerController.prototype.receiverListener = function(e) {
 LearnPlayerController.prototype.sessionListener = function(e) {
   console.log("Session listener");
   console.log(e);
+  this.appSession = e;
 }
 
 /* Request app session */
 LearnPlayerController.prototype.startAppSession = function() {
   console.log("Request app session")
-  chrome.cast.requestSession(onRequestSessionSuccess, onRequestSessionError);
+  chrome.cast.requestSession(this.onRequestSessionSuccess.bind(this), this.onRequestSessionError.bind(this));
 }
 
 
@@ -68,7 +68,7 @@ LearnPlayerController.prototype.onRequestSessionSuccess = function(e) {
   console.log(e);
   this.appSession = e;
 
-  this.appSession.addUpdateListener(sessionUpdated);
+  this.appSession.addUpdateListener(this.sessionUpdated.bind(this));
 }
 
 /* Error when starting session */
@@ -88,7 +88,7 @@ LearnPlayerController.prototype.sessionUpdated = function(e) {
 /* Request session end */
 LearnPlayerController.prototype.stopApp = function() {
   console.log("Stop app session.")
-  appSession.stop(onStopSuccess, onStopError);
+  this.appSession.stop(this.onStopSuccess.bind(this), this.onStopError.bind(this));
 }
 
 /* Error while requesting session end */

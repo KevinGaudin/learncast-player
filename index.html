@@ -8,8 +8,9 @@
 </head>
 <body ng-controller="LearnPlayerController">
 <h1>Sender</h1>
-<div onclick="startAppSession()">Request session</div>
-<div onclick="stopApp()">Stop application</div>
+<div ng-click="startAppSession()">Request session</div>
+<div ng-click="stopApp()">Stop application</div>
 <input type="text" ng-model="name" />
+<button>Go</button>
 </body>
 </html>
