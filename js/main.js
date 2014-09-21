@@ -20,8 +20,8 @@ var LearnPlayerController = function($scope) {
   $scope.startAppSession = this.startAppSession.bind(this);
   $scope.stopApp = this.stopApp.bind(this);
   $scope.sendMessage = this.sendMessage.bind(this);
-
-  this.name = "Player" + Math.floor((Math.random() * 10) + 1);
+  $scope.identify = this.identify.bind(this);
+  this.name = "Player" + Math.floor((Math.random() * 1000) + 1);
 }
 
 LearnPlayerController.prototype = {
@@ -102,13 +102,17 @@ LearnPlayerController.prototype = {
     console.log(e);
   },
 
-  /* Send message to receiver */
-  sendMessage: function() {
-    console.log("Send message to receiver");
+  identify: function() {
     var command = {
       command: 'identify',
       name: this.name
     };
+    this.sendMessage(command);
+  },
+
+  /* Send message to receiver */
+  sendMessage: function(command) {
+    console.log("Send message to receiver");
     if (this.appSession) {
       this.appSession.sendMessage(LEARN_NAMESPACE, command,
         function(e) {
@@ -129,7 +133,7 @@ LearnPlayerController.prototype = {
     switch (event.command) {
       case "identify":
         console.log("should identify");
-        this.sendMessage();
+        this.identify();
         break;
       default:
         console.log("unknown command");
