@@ -1,4 +1,5 @@
 var applicationID = "6F1E40A5";
+var LEARN_NAMESPACE = "urn:x-cast:com.kg.learn";
 
 console.log("Create app module");
 var learnPlayerApp = angular.module('LearnPlayerApp', []);
@@ -15,92 +16,128 @@ var LearnPlayerController = function($scope) {
     }
   }
 
+  // Bind public methods
   $scope.startAppSession = this.startAppSession.bind(this);
   $scope.stopApp = this.stopApp.bind(this);
-  $scope.name = "Player" + Math.floor((Math.random() * 10) + 1);
+  $scope.sendMessage = this.sendMessage.bind(this);
+
+  this.name = "Player" + Math.floor((Math.random() * 10) + 1);
 }
 
+LearnPlayerController.prototype = {
+  /**
+   * Cast extension is available, init contact.
+   */
+  initializeCastApi: function() {
+    this.sessionRequest = new chrome.cast.SessionRequest(applicationID);
+    this.apiConfig = new chrome.cast.ApiConfig(this.sessionRequest, this.sessionListener.bind(this),
+      this.receiverListener.bind(this));
+    chrome.cast.initialize(this.apiConfig, this.onInitSuccess.bind(this), this.onInitError.bind(this));
+  },
 
-/**
- * Cast extension is available, init contact.
- */
-LearnPlayerController.prototype.initializeCastApi = function() {
-  this.sessionRequest = new chrome.cast.SessionRequest(applicationID);
-  this.apiConfig = new chrome.cast.ApiConfig(this.sessionRequest, this.sessionListener.bind(this),
-    this.receiverListener.bind(this));
-  chrome.cast.initialize(this.apiConfig, this.onInitSuccess.bind(this), this.onInitError.bind(this));
-};
+  /* API Init OK */
+  onInitSuccess: function() {
+    console.log("Cast API intialized.");
+  },
 
-/* API Init OK */
-LearnPlayerController.prototype.onInitSuccess = function() {
-  console.log("Cast API intialized.");
-}
+  onInitError: function() {
+    console.log("Cast API init error.");
+  },
 
-LearnPlayerController.prototype.onInitError = function() {
-  console.log("Cast API init error.");
-}
+  /* Receiver events */
+  receiverListener: function(e) {
+    console.log("Receiver listener");
+    if (e === chrome.cast.ReceiverAvailability.AVAILABLE) {
+      console.log("Receiver is available");
+    }
+  },
 
-/* Receiver events */
-LearnPlayerController.prototype.receiverListener = function(e) {
-  console.log("Receiver listener");
-  if (e === chrome.cast.ReceiverAvailability.AVAILABLE) {
-    console.log("Receiver is available");
+  /* Session events */
+  sessionListener: function(e) {
+    console.log("Session listener");
+    console.log(e);
+    this.appSession = e;
+  },
+
+  /* Request app session */
+  startAppSession: function() {
+    console.log("Request app session")
+    chrome.cast.requestSession(this.onRequestSessionSuccess.bind(this), this.onRequestSessionError.bind(this));
+  },
+
+  /* Session started */
+  onRequestSessionSuccess: function(e) {
+    console.log("App session request success");
+    console.log(e);
+    this.appSession = e;
+    this.appSession.addUpdateListener(this.sessionUpdated.bind(this));
+    this.appSession.addMessageListener(LEARN_NAMESPACE, this.onReceiverMessage.bind(this));
+  },
+
+  /* Error when starting session */
+  onRequestSessionError: function(e) {
+    console.log("App session request error: ");
+    console.log(e);
+  },
+
+  /* Session events */
+  sessionUpdated: function(e) {
+    console.log("Session update received");
+    console.log(e);
+  },
+
+  /* Request session end */
+  stopApp: function() {
+    console.log("Stop app session.")
+    this.appSession.stop(this.onStopSuccess.bind(this), this.onStopError.bind(this));
+  },
+
+  onStopSuccess: function() {
+    console.log("App stopped successfully");
+  },
+
+  /* Error while requesting session end */
+  onStopError: function(e) {
+    console.log("App stop error");
+    console.log(e);
+  },
+
+  /* Send message to receiver */
+  sendMessage: function() {
+    console.log("Send message to receiver");
+    var command = {
+      command: 'identify',
+      name: this.name
+    };
+    if (this.appSession) {
+      this.appSession.sendMessage(LEARN_NAMESPACE, command,
+        function(e) {
+          console.log("Message sent");
+        },
+        function(e) {
+          console.log("Message not sent");
+        });
+    } else {
+      console.log('No session available');
+    }
+  },
+
+  onReceiverMessage: function(protocol, e) {
+    var event = JSON.parse(e);
+    console.log("Message received: ", protocol, event);
+
+    switch (event.command) {
+      case "identify":
+        console.log("should identify");
+        this.sendMessage();
+        break;
+      default:
+        console.log("unknown command");
+    }
   }
 }
 
-/* Session events */
-LearnPlayerController.prototype.sessionListener = function(e) {
-  console.log("Session listener");
-  console.log(e);
-  this.appSession = e;
-}
 
-/* Request app session */
-LearnPlayerController.prototype.startAppSession = function() {
-  console.log("Request app session")
-  chrome.cast.requestSession(this.onRequestSessionSuccess.bind(this), this.onRequestSessionError.bind(this));
-}
-
-
-/* Session started */
-LearnPlayerController.prototype.onRequestSessionSuccess = function(e) {
-  console.log("App session request success");
-  console.log(e);
-  this.appSession = e;
-
-  this.appSession.addUpdateListener(this.sessionUpdated.bind(this));
-}
-
-/* Error when starting session */
-LearnPlayerController.prototype.onRequestSessionError = function(e) {
-  console.log("App session request error: ");
-  console.log(e);
-}
-
-
-/* Session events */
-LearnPlayerController.prototype.sessionUpdated = function(e) {
-  console.log("Session update received");
-  console.log(e);
-}
-
-
-/* Request session end */
-LearnPlayerController.prototype.stopApp = function() {
-  console.log("Stop app session.")
-  this.appSession.stop(this.onStopSuccess.bind(this), this.onStopError.bind(this));
-}
-
-/* Error while requesting session end */
-LearnPlayerController.prototype.onStopError = function(e) {
-  console.log("App stop error");
-  console.log(e);
-}
-
-/* Session ended. */
-LearnPlayerController.prototype.onStopSuccess = function(e) {
-  console.log("App stopped.");
-}
 
 LearnPlayerController.$inject = ['$scope'];
 learnPlayerApp.controller('LearnPlayerController', LearnPlayerController);

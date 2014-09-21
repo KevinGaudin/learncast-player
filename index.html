@@ -6,11 +6,10 @@
 	<script type="text/javascript" src="https://www.gstatic.com/cv/js/sender/v1/cast_sender.js"></script>
 	<script type="text/javascript" src="js/main.js"></script>
 </head>
-<body ng-controller="LearnPlayerController">
+<body ng-controller="LearnPlayerController as learnPlayer">
 <h1>Sender</h1>
 <div ng-click="startAppSession()">Request session</div>
 <div ng-click="stopApp()">Stop application</div>
-<input type="text" ng-model="name" />
-<button>Go</button>
+<input type="text" ng-model="learnPlayer.name" ng-change="sendMessage()"/>
 </body>
 </html>
