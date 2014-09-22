@@ -15,5 +15,10 @@
 <div ng-click="stopApp()">Stop application</div>
 <input type="text" ng-model="learnPlayer.name" ng-change="identify()"/><br/>
 <img monsterid="{{learnPlayer.name}}" title="{{learnPlayer.name}}" class="avatar"/>
+<button ng-click="readyToPlay()">Ready</button>
+<div id="question-block" ng-show="learnPlayer.question">
+<h2 id="question">{{learnPlayer.question}}</h2>
+<input type="text" ng-model="learnPlayer.answer" ng-change="submitAnswer()">
+</div>
 </body>
 </html>

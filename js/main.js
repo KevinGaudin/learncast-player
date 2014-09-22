@@ -6,6 +6,7 @@ var learnPlayerApp = angular.module('LearnPlayerApp', []);
 
 var LearnPlayerController = function($scope) {
   _this = this;
+  this._scope = $scope;
   // Callback called when Cast extension is available
   window['__onGCastApiAvailable'] = function(loaded, errorInfo) {
     if (loaded) {
@@ -21,7 +22,13 @@ var LearnPlayerController = function($scope) {
   $scope.stopApp = this.stopApp.bind(this);
   $scope.sendMessage = this.sendMessage.bind(this);
   $scope.identify = this.identify.bind(this);
+  $scope.readyToPlay = this.readyToPlay.bind(this);
+  $scope.submitAnswer = this.submitAnswer.bind(this);
+
+
   this.name = "Player" + Math.floor((Math.random() * 1000) + 1);
+  this.question = "";
+  this.answer = "";
 }
 
 LearnPlayerController.prototype = {
@@ -102,21 +109,13 @@ LearnPlayerController.prototype = {
     console.log(e);
   },
 
-  identify: function() {
-    var command = {
-      command: 'identify',
-      name: this.name
-    };
-    this.sendMessage(command);
-  },
-
-  /* Send message to receiver */
+  /* Primitive to send message to receiver */
   sendMessage: function(command) {
     console.log("Send message to receiver");
     if (this.appSession) {
       this.appSession.sendMessage(LEARN_NAMESPACE, command,
         function(e) {
-          console.log("Message sent");
+          console.log("Message sent", command);
         },
         function(e) {
           console.log("Message not sent");
@@ -126,6 +125,28 @@ LearnPlayerController.prototype = {
     }
   },
 
+
+  /**** COMMANDS ****/
+
+  /* Send player name to receiver */
+  identify: function() {
+    var command = {
+      command: 'identify',
+      name: this.name
+    };
+    this.sendMessage(command);
+  },
+
+  readyToPlay: function() {
+    var command = {
+      command: 'readyToPlay',
+      value: true
+    };
+    this.sendMessage(command);
+  },
+
+
+  /* Handle message from Cast receiver*/
   onReceiverMessage: function(protocol, e) {
     var event = JSON.parse(e);
     console.log("Message received: ", protocol, event);
@@ -135,10 +156,28 @@ LearnPlayerController.prototype = {
         console.log("should identify");
         this.identify();
         break;
+      case "question":
+        var _this = this;
+        this._scope.$apply(function() {
+          _this.ask(event.question);
+          console.log("Quesion asked: ", event.question);
+        });
+        break;
       default:
         console.log("unknown command");
     }
-  }
+  },
+  ask: function(question) {
+    this.question = question;
+  },
+  submitAnswer: function() {
+    console.log("this before sending answer", this);
+    var command = {
+      command: 'submitAnswer',
+      value: this.answer
+    };
+    this.sendMessage(command);
+  },
 }
 
 
