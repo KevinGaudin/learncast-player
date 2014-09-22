@@ -1,4 +1,17 @@
+body {
+	background: black;
+	color: white;
+}
+
+h1 {
+	color: red;
+}
+
 .avatar {
 	width: 5em;
 	height: 5em;
+}
+
+#winner img.avatar {
+	
 }

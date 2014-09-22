@@ -3,7 +3,8 @@
 <head>
 	<title>Learn sender</title>
 	<link rel="stylesheet" type="text/css" href="css/main.css">
-	<script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/angularjs/1.3.0-rc.0/angular.min.js"></script>
+	<link rel="stylesheet" type="text/css" href="vendor/daneden/animate.css">
+	<script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/angularjs/1.3.0-rc.2/angular.min.js"></script>
 	<script type="text/javascript" src="vendor/kevingaudin/monsterid/monsterid.min.js"></script>
 	<script type="text/javascript" src="https://www.gstatic.com/cv/js/sender/v1/cast_sender.js"></script>
 	<script type="text/javascript" src="js/main.js"></script>
@@ -19,6 +20,10 @@
 <div id="question-block" ng-show="learnPlayer.question">
 <h2 id="question">{{learnPlayer.question}}</h2>
 <input type="text" ng-model="learnPlayer.answer" ng-change="submitAnswer()">
+</div>
+<div id="winner" ng-show="learnPlayer.winner">
+	Winner: {{learnPlayer.winner.name}}
+	<img monsterid="{{learnPlayer.winner.name}}" title="{{learnPlayer.winner.name}}" class="avatar"/>
 </div>
 </body>
 </html>

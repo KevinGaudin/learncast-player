@@ -163,12 +163,16 @@ LearnPlayerController.prototype = {
           console.log("Quesion asked: ", event.question);
         });
         break;
+      case "endGame":
+        this.endGame(event.winner);
+        break;
       default:
         console.log("unknown command");
     }
   },
   ask: function(question) {
     this.question = question;
+    this.answer = "";
   },
   submitAnswer: function() {
     console.log("this before sending answer", this);
@@ -178,6 +182,14 @@ LearnPlayerController.prototype = {
     };
     this.sendMessage(command);
   },
+  endGame: function(winner) {
+    var _this = this;
+    this._scope.$apply(function() {
+      console.log("winner is ", winner);
+      _this.question = "";
+      _this.winner = winner;
+    });
+  }
 }
 
 
