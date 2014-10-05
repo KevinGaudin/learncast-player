@@ -41,6 +41,7 @@ var LearnPlayerController = function($scope) {
   this.name = "Player" + Math.floor((Math.random() * 1000) + 1);
   this.question = "";
   this.answer = "";
+  this.receiverAvailable = false;
 }
 
 LearnPlayerController.prototype = {
@@ -66,8 +67,12 @@ LearnPlayerController.prototype = {
   /* Receiver events */
   receiverListener: function(e) {
     console.log("Receiver listener");
+    _this = this;
     if (e === chrome.cast.ReceiverAvailability.AVAILABLE) {
       console.log("Receiver is available");
+      this._scope.$apply(function() {
+        _this.receiverAvailable = true;
+      });
     }
   },
 

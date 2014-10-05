@@ -27,8 +27,8 @@
 		<material-toolbar class="material-theme-light">
 			<h1 class="material-toolbar-tools" translate='TITLE'></h1>
 		</material-toolbar>
-		<div translate="RECEIVER_SEARCH"></div>
-		<div ng-click="startAppSession()" translate="RECEIVER_FOUND"></div>
+		<div ng-hide="learnPlayer.receiverAvailable" translate="RECEIVER_SEARCH"></div>
+		<div ng-show="learnPlayer.receiverAvailable" ng-click="startAppSession()" translate="RECEIVER_FOUND"></div>
 		<input type="text" ng-model="learnPlayer.name" ng-change="identify()"/><br/>
 		<img monsterid="{{learnPlayer.name}}" title="{{learnPlayer.name}}" class="avatar"/>
 		<button ng-click="readyToPlay()" translate="READY"></button>
