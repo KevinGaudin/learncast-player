@@ -2,7 +2,19 @@ var applicationID = "6F1E40A5";
 var LEARN_NAMESPACE = "urn:x-cast:com.kg.learn";
 
 console.log("Create app module");
-var learnPlayerApp = angular.module('LearnPlayerApp', []);
+var learnPlayerApp = angular.module('LearnPlayerApp', ['ngMaterial','pascalprecht.translate']);
+
+learnPlayerApp.config(['$translateProvider',
+  function($translateProvider) {
+    $translateProvider.useStaticFilesLoader({
+      prefix: 'UI/assets/translation/main/',
+      suffix: '.json'
+    });
+    $translateProvider.addInterpolation('$translateMessageFormatInterpolation');
+    $translateProvider.preferredLanguage('fr');
+
+  }
+]);
 
 var LearnPlayerController = function($scope) {
   _this = this;

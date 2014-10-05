@@ -1,29 +1,44 @@
 <!DOCTYPE html>
 <html ng-app="LearnPlayerApp">
-<head>
-	<title>Learn sender</title>
-	<link rel="stylesheet" type="text/css" href="css/main.css">
-	<link rel="stylesheet" type="text/css" href="vendor/daneden/animate.css">
-	<script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/angularjs/1.3.0-rc.2/angular.min.js"></script>
-	<script type="text/javascript" src="vendor/kevingaudin/monsterid/monsterid.min.js"></script>
-	<script type="text/javascript" src="https://www.gstatic.com/cv/js/sender/v1/cast_sender.js"></script>
-	<script type="text/javascript" src="js/main.js"></script>
-	<script type="text/javascript" src="js/service.monsterid.js"></script>
-</head>
-<body ng-controller="LearnPlayerController as learnPlayer">
-<h1>Sender</h1>
-<div ng-click="startAppSession()">Request session</div>
-<div ng-click="stopApp()">Stop application</div>
-<input type="text" ng-model="learnPlayer.name" ng-change="identify()"/><br/>
-<img monsterid="{{learnPlayer.name}}" title="{{learnPlayer.name}}" class="avatar"/>
-<button ng-click="readyToPlay()">Ready</button>
-<div id="question-block" ng-show="learnPlayer.question">
-<h2 id="question">{{learnPlayer.question}}</h2>
-<input type="text" ng-model="learnPlayer.answer" ng-change="submitAnswer()">
-</div>
-<div id="winner" ng-show="learnPlayer.winner">
-	Winner: {{learnPlayer.winner.name}}
-	<img monsterid="{{learnPlayer.winner.name}}" title="{{learnPlayer.winner.name}}" class="avatar"/>
-</div>
-</body>
+	<head>
+		<title>Learn sender</title>
+		<link rel="stylesheet" type="text/css" href="bower_components/angular-material/angular-material.min.css">
+		<link rel="stylesheet" type="text/css" href="css/main.css">
+		<link rel="stylesheet" type="text/css" href="vendor/daneden/animate.css">
+		
+		<!-- Bower dependencies -->
+		<script type="text/javascript" src="bower_components/angular/angular.min.js"></script>
+		<script type="text/javascript" src="bower_components/angular-animate/angular-animate.min.js"></script>
+		<script type="text/javascript" src="bower_components/angular-material/angular-material.min.js"></script>
+		<script type="text/javascript" src="bower_components/angular-translate/angular-translate.min.js"></script>
+		<script type="text/javascript" src="bower_components/angular-translate-loader-static-files/angular-translate-loader-static-files.min.js"></script>
+		<script src="bower_components/messageformat/messageformat.js"></script>
+		<script src="bower_components/messageformat/locale/en.js"></script>
+		<script src="bower_components/messageformat/locale/fr.js"></script>
+		<script src="bower_components/angular-translate-interpolation-messageformat/angular-translate-interpolation-messageformat.min.js"></script>
+		<!-- / Bower dependencies -->
+		
+		<script type="text/javascript" src="vendor/kevingaudin/monsterid/monsterid.min.js"></script>
+		<script type="text/javascript" src="https://www.gstatic.com/cv/js/sender/v1/cast_sender.js"></script>
+		<script type="text/javascript" src="src/main.js"></script>
+		<script type="text/javascript" src="src/service.monsterid.js"></script>
+	</head>
+	<body ng-controller="LearnPlayerController as learnPlayer">
+		<material-toolbar class="material-theme-light">
+			<h1 class="material-toolbar-tools" translate='TITLE'></h1>
+		</material-toolbar>
+		<div translate="RECEIVER_SEARCH"></div>
+		<div ng-click="startAppSession()" translate="RECEIVER_FOUND"></div>
+		<input type="text" ng-model="learnPlayer.name" ng-change="identify()"/><br/>
+		<img monsterid="{{learnPlayer.name}}" title="{{learnPlayer.name}}" class="avatar"/>
+		<button ng-click="readyToPlay()" translate="READY"></button>
+		<div id="question-block" ng-show="learnPlayer.question">
+			<h2 id="question">{{learnPlayer.question}}</h2>
+			<input type="text" ng-model="learnPlayer.answer" ng-change="submitAnswer()">
+		</div>
+		<div id="winner" >
+			{{"WINNER" | translate}} {{learnPlayer.winner.name}}
+		</div>
+		<div ng-click="stopApp()" translate="CLOSE_APP"></div>
+	</body>
 </html>
