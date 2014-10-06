@@ -24,21 +24,53 @@
 		<script type="text/javascript" src="src/service.monsterid.js"></script>
 	</head>
 	<body ng-controller="LearnPlayerController as learnPlayer">
-		<material-toolbar class="material-theme-light">
-			<h1 class="material-toolbar-tools" translate='TITLE'></h1>
-		</material-toolbar>
-		<div ng-hide="learnPlayer.receiverAvailable" translate="RECEIVER_SEARCH"></div>
-		<div ng-show="learnPlayer.receiverAvailable" ng-click="startAppSession()" translate="RECEIVER_FOUND"></div>
-		<input type="text" ng-model="learnPlayer.name" ng-change="identify()"/><br/>
-		<img monsterid="{{learnPlayer.name}}" title="{{learnPlayer.name}}" class="avatar"/>
-		<button ng-click="readyToPlay()" translate="READY"></button>
-		<div id="question-block" ng-show="learnPlayer.question">
-			<h2 id="question">{{learnPlayer.question}}</h2>
-			<input type="text" ng-model="learnPlayer.answer" ng-change="submitAnswer()">
+		<div layout="vertical">
+			<!-- Toolbar -->
+			<material-toolbar class="material-theme-light">
+				<div class="material-toolbar-tools">
+					<span translate='TITLE'></span>
+					<!-- fill up the space between left and right area -->
+			      	<span flex></span>
+
+
+					<div ng-hide="learnPlayer.receiverAvailable" translate="RECEIVER_SEARCH"></div>
+					<material-button ng-show="learnPlayer.receiverAvailable && !learnPlayer.sessionConnected" ng-click="startAppSession()">
+						<img src="UI/assets/icons/material/cast.svg">
+					</material-button>
+
+		    		<material-button ng-click="stopApp()" ng-show="learnPlayer.sessionConnected">
+						<img src="UI/assets/icons/material/cast-connected.svg">
+			    	</material-button>
+				</div>				
+			</material-toolbar>
+
+			<material-content>
+				<!-- Player pane -->
+				<material-card>
+					<div layout="vertical">
+						<div layout="horizontal" layout-align="center">
+							<img monsterid="{{learnPlayer.name}}" title="{{learnPlayer.name}}" class="avatar"/>
+							<div layout="vertical" layout-align="center">
+								<label translate="PLAYER_NAME"></label>
+								<input type="text" ng-model="learnPlayer.name" ng-change="identify()"/>
+							</div>
+						</div>
+						<material-button class="material-button-raised material-button-colored" ng-show="learnPlayer.sessionConnected" ng-click="readyToPlay()" translate="READY"></material-button>
+					</div>
+				</material-card>
+				<!-- Questions Pane -->
+				<material-card id="question-block" ng-show="learnPlayer.question">
+					<div layout="horizontal" layout-align="center">
+					<div layout="vertical" layout-align="center">
+						<h2 id="question">{{learnPlayer.question}}</h2>
+						<input type="text" ng-model="learnPlayer.answer" ng-change="submitAnswer()">
+					</div>
+					</div>
+				</material-card>
+				<div id="winner" ng-show="learnPlayer.winner">
+					{{"WINNER" | translate}} {{learnPlayer.winner.name}}
+				</div>
+			</material-content>
 		</div>
-		<div id="winner" >
-			{{"WINNER" | translate}} {{learnPlayer.winner.name}}
-		</div>
-		<div ng-click="stopApp()" translate="CLOSE_APP"></div>
 	</body>
 </html>

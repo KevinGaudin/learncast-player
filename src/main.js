@@ -16,7 +16,7 @@ learnPlayerApp.config(['$translateProvider',
   }
 ]);
 
-var LearnPlayerController = function($scope) {
+var LearnPlayerController = function($scope, $translate) {
   _this = this;
   this._scope = $scope;
   // Callback called when Cast extension is available
@@ -38,10 +38,13 @@ var LearnPlayerController = function($scope) {
   $scope.submitAnswer = this.submitAnswer.bind(this);
 
 
-  this.name = "Player" + Math.floor((Math.random() * 1000) + 1);
+  $translate("PLAYER").then(function(player) {
+    _this.name = player + Math.floor((Math.random() * 1000) + 1);
+  });
   this.question = "";
   this.answer = "";
   this.receiverAvailable = false;
+  this.sessionConnected = false;
 }
 
 LearnPlayerController.prototype = {
@@ -96,6 +99,10 @@ LearnPlayerController.prototype = {
     this.appSession = e;
     this.appSession.addUpdateListener(this.sessionUpdated.bind(this));
     this.appSession.addMessageListener(LEARN_NAMESPACE, this.onReceiverMessage.bind(this));
+    _this = this;
+    this._scope.$apply(function() {
+      _this.sessionConnected = true;
+    });
   },
 
   /* Error when starting session */
@@ -211,5 +218,5 @@ LearnPlayerController.prototype = {
 
 
 
-LearnPlayerController.$inject = ['$scope'];
+LearnPlayerController.$inject = ['$scope', '$translate'];
 learnPlayerApp.controller('LearnPlayerController', LearnPlayerController);
