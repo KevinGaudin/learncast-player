@@ -44,9 +44,9 @@
 				</div>				
 			</material-toolbar>
 
-			<material-content>
+			<material-content layout="vertical" layout-sm="horizontal">
 				<!-- Player pane -->
-				<material-card>
+				<material-card flex>
 					<div layout="vertical">
 						<div layout="horizontal" layout-align="center">
 							<img monsterid="{{learnPlayer.name}}" title="{{learnPlayer.name}}" class="avatar"/>
@@ -59,7 +59,7 @@
 					</div>
 				</material-card>
 				<!-- Questions Pane -->
-				<material-card id="question-block" ng-show="learnPlayer.question">
+				<material-card  flex id="question-block" ng-show="learnPlayer.question">
 					<div layout="horizontal" layout-align="center">
 					<div layout="vertical" layout-align="center">
 						<h2 id="question">{{learnPlayer.question}}</h2>

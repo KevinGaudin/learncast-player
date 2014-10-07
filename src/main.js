@@ -41,7 +41,7 @@ var LearnPlayerController = function($scope, $translate) {
   $translate("PLAYER").then(function(player) {
     _this.name = player + Math.floor((Math.random() * 1000) + 1);
   });
-  this.question = "";
+  this.question = "Combien font 3 * 4 / 32 ?";
   this.answer = "";
   this.receiverAvailable = false;
   this.sessionConnected = false;
