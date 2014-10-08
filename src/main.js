@@ -2,7 +2,7 @@ var applicationID = "6F1E40A5";
 var LEARN_NAMESPACE = "urn:x-cast:com.kg.learn";
 
 console.log("Create app module");
-var learnPlayerApp = angular.module('LearnPlayerApp', ['ngMaterial','pascalprecht.translate']);
+var learnPlayerApp = angular.module('LearnPlayerApp', ['ngMaterial', 'pascalprecht.translate', 'ngAnimate']);
 
 learnPlayerApp.config(['$translateProvider',
   function($translateProvider) {
@@ -16,9 +16,10 @@ learnPlayerApp.config(['$translateProvider',
   }
 ]);
 
-var LearnPlayerController = function($scope, $translate) {
+var LearnPlayerController = function($scope, $document, $translate) {
   _this = this;
   this._scope = $scope;
+  this.document = $document;
   // Callback called when Cast extension is available
   window['__onGCastApiAvailable'] = function(loaded, errorInfo) {
     if (loaded) {
@@ -36,13 +37,19 @@ var LearnPlayerController = function($scope, $translate) {
   $scope.identify = this.identify.bind(this);
   $scope.readyToPlay = this.readyToPlay.bind(this);
   $scope.submitAnswer = this.submitAnswer.bind(this);
+  $scope.testAnimate = function($event) {
+    console.log("testAnimate: element ", $event);
+    event.target.className += " animated bounce";
+  };
 
 
   $translate("PLAYER").then(function(player) {
     _this.name = player + Math.floor((Math.random() * 1000) + 1);
   });
+  this.gameStarted = false;
   this.question = "Combien font 3 * 4 / 32 ?";
   this.answer = "";
+  this.answerOK = false;
   this.receiverAvailable = false;
   this.sessionConnected = false;
 }
@@ -195,8 +202,21 @@ LearnPlayerController.prototype = {
     }
   },
   ask: function(question) {
-    this.question = question;
-    this.answer = "";
+    this.gameStarted = true;
+    if (this.answer != "") {
+      this.answerOK = true;
+      _this = this;
+      setTimeout(function() {
+        _this._scope.$apply(function() {
+          _this.question = question;
+          _this.answer = "";
+          _this.answerOK = false;
+        });
+      }, 2000);
+    } else {
+      this.question = question;
+      this.answer = "";
+    }
   },
   submitAnswer: function() {
     console.log("this before sending answer", this);
@@ -212,11 +232,12 @@ LearnPlayerController.prototype = {
       console.log("winner is ", winner);
       _this.question = "";
       _this.winner = winner;
+      _this.gameStarted = false;
     });
   }
 }
 
 
 
-LearnPlayerController.$inject = ['$scope', '$translate'];
+LearnPlayerController.$inject = ['$scope', '$document', '$translate'];
 learnPlayerApp.controller('LearnPlayerController', LearnPlayerController);

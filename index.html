@@ -3,8 +3,8 @@
 	<head>
 		<title>Learn sender</title>
 		<link rel="stylesheet" type="text/css" href="bower_components/angular-material/angular-material.min.css">
-		<link rel="stylesheet" type="text/css" href="css/main.css">
 		<link rel="stylesheet" type="text/css" href="vendor/daneden/animate.css">
+		<link rel="stylesheet" type="text/css" href="css/main.css">
 		
 		<!-- Bower dependencies -->
 		<script type="text/javascript" src="bower_components/angular/angular.min.js"></script>
@@ -46,25 +46,27 @@
 
 			<material-content layout="vertical" layout-sm="horizontal">
 				<!-- Player pane -->
-				<material-card flex>
-					<div layout="vertical">
-						<div layout="horizontal" layout-align="center">
+				<material-card flex id="player-pane">
+					<div layout="vertical" layout-align="center center">
+						<div layout="vertical">
+						<section layout="horizontal" layout-align="center">
 							<img monsterid="{{learnPlayer.name}}" title="{{learnPlayer.name}}" class="avatar"/>
 							<div layout="vertical" layout-align="center">
 								<label translate="PLAYER_NAME"></label>
-								<input type="text" ng-model="learnPlayer.name" ng-change="identify()"/>
+								<input type="text" ng-model="learnPlayer.name" ng-change="identify()" />
 							</div>
+						</section>
+						<material-button class="material-button-raised material-button-colored" ng-show="learnPlayer.sessionConnected || true" ng-click="readyToPlay()" ng-disabled="learnPlayer.gameStarted">{{'READY'|translate}}</material-button>
 						</div>
-						<material-button class="material-button-raised material-button-colored" ng-show="learnPlayer.sessionConnected" ng-click="readyToPlay()" translate="READY"></material-button>
 					</div>
 				</material-card>
 				<!-- Questions Pane -->
-				<material-card  flex id="question-block" ng-show="learnPlayer.question">
+				<material-card  flex id="question-block" ng-show="learnPlayer.gameStarted">
 					<div layout="horizontal" layout-align="center">
-					<div layout="vertical" layout-align="center">
-						<h2 id="question">{{learnPlayer.question}}</h2>
-						<input type="text" ng-model="learnPlayer.answer" ng-change="submitAnswer()">
-					</div>
+						<div layout="vertical" layout-align="center">
+							<h2 id="question">{{learnPlayer.question}}</h2>
+							<input type="text" ng-model="learnPlayer.answer" ng-change="submitAnswer()" id="answer-field" ng-class="{ 'answerOK': learnPlayer.answerOK }" class="animated" placeholder="{{'ANSWER'|translate}}">
+						</div>
 					</div>
 				</material-card>
 				<div id="winner" ng-show="learnPlayer.winner">
