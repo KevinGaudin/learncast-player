@@ -38,8 +38,4 @@ material-button img {
 	animation: bounce 1s;
 }
 
-#answer-field.answerOK-remove {
-	-webkit-animation: fadeOut 1s;
-	animation: fadeOut 1s;
-}
 
