@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html ng-app="LearnPlayerApp">
 	<head>
-		<title>Learn sender</title>
+		<title translate="TITLE"></title>
 		<link rel="stylesheet" type="text/css" href="bower_components/angular-material/angular-material.min.css">
 		<link rel="stylesheet" type="text/css" href="vendor/daneden/animate.css">
 		<link rel="stylesheet" type="text/css" href="css/main.css">
@@ -56,7 +56,7 @@
 								<input type="text" ng-model="learnPlayer.name" ng-change="identify()" />
 							</div>
 						</section>
-						<material-button class="material-button-raised material-button-colored" ng-show="learnPlayer.sessionConnected || true" ng-click="readyToPlay()" ng-disabled="learnPlayer.gameStarted">{{'READY'|translate}}</material-button>
+						<material-button class="material-button-raised material-button-colored" ng-show="learnPlayer.sessionConnected" ng-click="readyToPlay()" ng-disabled="learnPlayer.gameStarted">{{'READY'|translate}}</material-button>
 						</div>
 					</div>
 				</material-card>
@@ -65,7 +65,7 @@
 					<div layout="horizontal" layout-align="center">
 						<div layout="vertical" layout-align="center">
 							<h2 id="question">{{learnPlayer.question}}</h2>
-							<input type="text" ng-model="learnPlayer.answer" ng-change="submitAnswer()" id="answer-field" ng-class="{ 'answerOK': learnPlayer.answerOK }" class="animated" placeholder="{{'ANSWER'|translate}}">
+							<input type="text" ng-model="learnPlayer.answer" ng-change="submitAnswer()" id="answer-field" ng-class="{ 'answerOK': learnPlayer.answerOK }" class="" placeholder="{{'ANSWER'|translate}}">
 						</div>
 					</div>
 				</material-card>
