@@ -47,11 +47,12 @@ var LearnPlayerController = function($scope, $document, $translate) {
     _this.name = player + Math.floor((Math.random() * 1000) + 1);
   });
   this.gameStarted = false;
-  this.question = "Combien font 3 * 4 / 32 ?";
+  this.question = null;
   this.answer = "";
   this.answerOK = false;
   this.receiverAvailable = false;
   this.sessionConnected = false;
+  this.winner = null;
 }
 
 LearnPlayerController.prototype = {
@@ -169,6 +170,9 @@ LearnPlayerController.prototype = {
   },
 
   readyToPlay: function() {
+    this.winner = null;
+    this.question = null;
+    this.answer = "";
     var command = {
       command: 'readyToPlay',
       value: true
