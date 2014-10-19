@@ -8,6 +8,8 @@
 		
 		<!-- Bower dependencies -->
 		<script type="text/javascript" src="bower_components/angular/angular.min.js"></script>
+		<script type="text/javascript" src="bower_components/hammerjs/hammer.min.js"></script>
+		<script type="text/javascript" src="bower_components/angular-aria/angular-aria.min.js"></script>
 		<script type="text/javascript" src="bower_components/angular-animate/angular-animate.min.js"></script>
 		<script type="text/javascript" src="bower_components/angular-material/angular-material.min.js"></script>
 		<script type="text/javascript" src="bower_components/angular-translate/angular-translate.min.js"></script>
@@ -26,27 +28,27 @@
 	<body ng-controller="LearnPlayerController as learnPlayer">
 		<div layout="vertical">
 			<!-- Toolbar -->
-			<material-toolbar class="material-theme-light">
-				<div class="material-toolbar-tools">
+			<md-toolbar class="md-theme-light">
+				<div class="md-toolbar-tools">
 					<span translate='TITLE'></span>
 					<!-- fill up the space between left and right area -->
 			      	<span flex></span>
 
 
 					<div ng-hide="learnPlayer.receiverAvailable" translate="RECEIVER_SEARCH"></div>
-					<material-button ng-show="learnPlayer.receiverAvailable && !learnPlayer.sessionConnected" ng-click="startAppSession()">
+					<md-button ng-show="learnPlayer.receiverAvailable && !learnPlayer.sessionConnected" ng-click="startAppSession()">
 						<img src="UI/assets/icons/material/cast.svg">
-					</material-button>
+					</md-button>
 
-		    		<material-button ng-click="stopApp()" ng-show="learnPlayer.sessionConnected">
+		    		<md-button ng-click="stopApp()" ng-show="learnPlayer.sessionConnected">
 						<img src="UI/assets/icons/material/cast-connected.svg">
-			    	</material-button>
+			    	</md-button>
 				</div>				
-			</material-toolbar>
+			</md-toolbar>
 
-			<material-content layout="vertical" layout-sm="horizontal">
+			<md-content layout="vertical" layout-sm="horizontal">
 				<!-- Player pane -->
-				<material-card flex id="player-pane">
+				<md-card flex id="player-pane">
 					<div layout="vertical" layout-align="center center">
 						<div layout="vertical">
 						<section layout="horizontal" layout-align="center">
@@ -56,23 +58,23 @@
 								<input type="text" ng-model="learnPlayer.name" ng-change="identify()" />
 							</div>
 						</section>
-						<material-button class="material-button-raised material-button-colored" ng-show="learnPlayer.sessionConnected" ng-click="readyToPlay()" ng-disabled="learnPlayer.gameStarted">{{'READY'|translate}}</material-button>
+						<md-button class="md-button-raised md-button-colored" ng-show="learnPlayer.sessionConnected" ng-click="readyToPlay()" ng-disabled="learnPlayer.gameStarted">{{'READY'|translate}}</md-button>
 						</div>
 					</div>
-				</material-card>
+				</md-card>
 				<!-- Questions Pane -->
-				<material-card  flex id="question-block" ng-show="learnPlayer.gameStarted">
+				<md-card  flex id="question-block" ng-show="learnPlayer.gameStarted">
 					<div layout="horizontal" layout-align="center">
 						<div layout="vertical" layout-align="center">
 							<h2 id="question">{{learnPlayer.question}}</h2>
 							<input type="text" ng-model="learnPlayer.answer" ng-change="submitAnswer()" id="answer-field" ng-class="{ 'answerOK': learnPlayer.answerOK }" class="" placeholder="{{'ANSWER'|translate}}">
 						</div>
 					</div>
-				</material-card>
+				</md-card>
 				<div id="winner" ng-show="learnPlayer.winner">
 					{{"WINNER" | translate}} {{learnPlayer.winner.name}}
 				</div>
-			</material-content>
+			</md-content>
 		</div>
 	</body>
 </html>
