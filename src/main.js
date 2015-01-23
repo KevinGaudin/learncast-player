@@ -53,6 +53,8 @@ var LearnPlayerController = function($scope, $document, $translate) {
   this.receiverAvailable = false;
   this.sessionConnected = false;
   this.winner = null;
+  this.rank = null;
+  this.roundFinished = false;
 }
 
 LearnPlayerController.prototype = {
@@ -123,6 +125,11 @@ LearnPlayerController.prototype = {
   sessionUpdated: function(e) {
     console.log("Session update received");
     console.log(e);
+    if(!e) {
+      // Session terminated some way
+      this.sessionConnected = false;
+      this.endGame();
+    }
   },
 
   /* Request session end */
@@ -133,6 +140,8 @@ LearnPlayerController.prototype = {
 
   onStopSuccess: function() {
     console.log("App stopped successfully");
+    this.sessionConnected = false;
+    this.endGame();
   },
 
   /* Error while requesting session end */
@@ -173,6 +182,7 @@ LearnPlayerController.prototype = {
     this.winner = null;
     this.question = null;
     this.answer = "";
+    this.roundFinished = false;
     var command = {
       command: 'readyToPlay',
       value: true
@@ -197,6 +207,9 @@ LearnPlayerController.prototype = {
           _this.ask(event.question);
           console.log("Quesion asked: ", event.question);
         });
+        break;
+      case "finish":
+        this.finish(event.rank);
         break;
       case "endGame":
         this.endGame(event.winner);
@@ -230,11 +243,19 @@ LearnPlayerController.prototype = {
     };
     this.sendMessage(command);
   },
+  finish: function(rank) {
+    var _this = this;
+    this._scope.$apply(function() {
+      console.log("Finished round with rank ", rank);
+      _this.question = null;
+      _this.rank = rank;
+      _this.roundFinished = true;
+    });  },
   endGame: function(winner) {
     var _this = this;
     this._scope.$apply(function() {
       console.log("winner is ", winner);
-      _this.question = "";
+      _this.question = null;
       _this.winner = winner;
       _this.gameStarted = false;
     });

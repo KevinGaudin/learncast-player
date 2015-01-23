@@ -6,5 +6,7 @@
     "READY": "Ready!",
     "ANSWER": "Answer here",
     "WINNER": "Winner:",
-    "WELCOME": "Welcome to LearnCast"
+    "WELCOME": "Welcome to LearnCast",
+    "FINISHED": "Completed!",
+    "RANK": "Rank:"
  }

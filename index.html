@@ -26,7 +26,7 @@
 		<script type="text/javascript" src="src/service.monsterid.js"></script>
 	</head>
 	<body ng-controller="LearnPlayerController as learnPlayer">
-		<div layout="vertical">
+		<div layout="column" layout-fill>
 			<!-- Toolbar -->
 			<md-toolbar class="md-theme-light">
 				<div class="md-toolbar-tools">
@@ -46,34 +46,43 @@
 				</div>				
 			</md-toolbar>
 
-			<md-content layout="vertical" layout-sm="horizontal">
+			<md-content layout="row" layout-sm="column">
 				<!-- Player pane -->
 				<md-card flex id="player-pane">
-					<div layout="vertical" layout-align="center center">
-						<div layout="vertical">
-						<section layout="horizontal" layout-align="center">
+					<div layout="column" layout-align="center center">
+						<div layout="column">
+						<section layout="row" layout-align="center">
 							<img monsterid="{{learnPlayer.name}}" title="{{learnPlayer.name}}" class="avatar"/>
-							<div layout="vertical" layout-align="center">
+							<md-input-group>
 								<label translate="PLAYER_NAME"></label>
-								<input type="text" ng-model="learnPlayer.name" ng-change="identify()" />
-							</div>
+								<md-input type="text" ng-model="learnPlayer.name" ng-change="identify()" />
+							</md-input-group>
 						</section>
 						<md-button class="md-button-raised md-button-colored" ng-show="learnPlayer.sessionConnected" ng-click="readyToPlay()" ng-disabled="learnPlayer.gameStarted">{{'READY'|translate}}</md-button>
 						</div>
 					</div>
 				</md-card>
 				<!-- Questions Pane -->
-				<md-card  flex id="question-block" ng-show="learnPlayer.gameStarted">
-					<div layout="horizontal" layout-align="center">
-						<div layout="vertical" layout-align="center">
+				<md-card  flex id="question-block" ng-show="learnPlayer.gameStarted && !learnPlayer.roundFinished">
+					<div layout="row" layout-align="center">
+						<div layout="column" layout-align="center">
 							<h2 id="question">{{learnPlayer.question}}</h2>
 							<input type="text" ng-model="learnPlayer.answer" ng-change="submitAnswer()" id="answer-field" ng-class="{ 'answerOK': learnPlayer.answerOK }" class="" placeholder="{{'ANSWER'|translate}}">
 						</div>
 					</div>
 				</md-card>
-				<div id="winner" ng-show="learnPlayer.winner">
-					{{"WINNER" | translate}} {{learnPlayer.winner.name}}
-				</div>
+				<!-- Results Pane -->
+				<md-card  flex id="results-block" ng-show="learnPlayer.roundFinished">
+					<div layout="row" layout-align="center">
+						<div layout="column" layout-align="center">
+							<h2 id="question">{{'FINISHED'|translate}}</h2>
+							<h3 class="rank">{{'RANK'|translate}} {{learnPlayer.rank}}</h3>
+							<h3 id="winner" ng-show="learnPlayer.winner">
+								{{"WINNER" | translate}} {{learnPlayer.winner.name}}
+							</h3>
+						</div>
+					</div>
+				</md-card>
 			</md-content>
 		</div>
 	</body>
